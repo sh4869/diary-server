@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>diary writer</title>
+    <style>
+        body {
+            max-width: 1000px;
+            margin: auto;
+        }
+        input, textarea {
+            display: block;
+        }
+        input, textarea {
+            width: 100%;
+        }
+    </style>
+  </head>
+  <body class="hack dark">
+    <h1>diary page</h1>
+    <form action="/diary" method="POST">
+      <label> date <input name="date" type="date" /> </label>
+      <label> title <input name="title" /> </label>
+      <label>content</label>
+      <textarea name="content" rows=30></textarea>
+      <button type="submit">write up!</button>
+    </form>
+  </body>
+</html>
