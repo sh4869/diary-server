@@ -52,13 +52,9 @@ async fn post_diary(req: web::Form<Diary>) -> impl Responder {
             .spawn()?;
         v.wait()?;
         // git commitの実行
+        let message = format!("{}/{}/{} (from web)", dates[0], dates[1], dates[2]);
         let mut v = Command::new("git")
-            .args(&[
-                "commit",
-                "--all",
-                "-m",
-                format!("{}/{}/{} (from web)", dates[0], dates[1], dates[2]),
-            ])
+            .args(&["commit", "--all", "-m", &message])
             .current_dir(&diary_repository_path)
             .spawn()?;
         v.wait()?;
