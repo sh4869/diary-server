@@ -80,7 +80,7 @@ async fn main() -> std::io::Result<()> {
             .service(post_diary)
             .service(actix_fs::Files::new("/", "./static").index_file("index.html"))
     })
-    .bind("127.0.0.1:8080")?
+    .bind("0.0.0.0:8095")?
     .run()
     .await
 }
