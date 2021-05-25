@@ -125,12 +125,13 @@ async fn main() -> std::io::Result<()> {
     env_logger::init();
     let v = Arc::new(Mutex::new(ProcessStatus { running: false }));
     let arc = v.clone();
+    let args: Vec<String> = env::args().collect();
     HttpServer::new(move || {
         App::new()
             .wrap(Logger::default())
             .wrap(ExclusiveLocker { working: Arc::clone(&arc) })
             .service(post_diary)
-            .service(actix_fs::Files::new("/", "./static").index_file("index.html"))
+            .service(actix_fs::Files::new("/", &args[1]).index_file("index.html"))
     })
     .bind("0.0.0.0:8095")?
     .run()
