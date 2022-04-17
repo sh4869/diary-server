@@ -87,10 +87,10 @@ fn v(req: web::Form<Diary>) -> Result<(), Error> {
         Err(e) => return Err(std::io::Error::new(std::io::ErrorKind::NotFound, e)),
     };
     // git pullの実行
-    run_git_command(&diary_repository_path, &Vec::from(["pull", "origin", "diary"]))?;
+    run_git_command(&diary_repository_path, &Vec::from(["pull", "origin", "main"]))?;
     // ファイルを作成
     let dates: Vec<&str> = req.date.split("-").collect();
-    let path = format!("{}/{}/{}/{}.md", diary_repository_path, dates[0], dates[1], dates[2]);
+    let path = format!("{}/diary/{}/{}/{}.md", diary_repository_path, dates[0], dates[1], dates[2]);
     {
         let parent = Path::new(&path).parent().unwrap();
         if !parent.exists() {
