@@ -113,8 +113,12 @@ fn v(req: web::Form<Diary>) -> Result<(), Error> {
 
 #[post("/diary")]
 async fn post_diary(req: web::Form<Diary>) -> impl Responder {
+    let response = html! {
+        h1 {"updated!"}
+        (PreEscaped(r#"<script>setTimeout(() => {window.location.pathname = ""},1000)</script>"#))
+    };
     match v(req) {
-        Ok(_) => HttpResponse::Ok().body(html! {h1 {"updated!"}}.into_string()),
+        Ok(_) => HttpResponse::Ok().body(response.into_string()),
         Err(e) => HttpResponse::InternalServerError().body(format!("{}", e)),
     }
 }
