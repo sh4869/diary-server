@@ -68,6 +68,7 @@ fn run_git_command(diary_repository_path: &str, args: &Vec<&str>) -> Result<(), 
     let command_str = String::from("git ") + &args.join(" ");
     log::debug!("run command : {}", command_str);
 
+
     let output = v.wait_with_output()?;
     // エラー時の処理
     if !output.status.success() {
@@ -80,7 +81,7 @@ fn run_git_command(diary_repository_path: &str, args: &Vec<&str>) -> Result<(), 
     Ok(())
 }
 
-fn v(req: web::Form<Diary>) -> Result<(), Error> {
+fn commit_diary(req: web::Form<Diary>) -> Result<(), Error> {
     // レポジトリパスの取得
     let diary_repository_path = match env::var("DIARY_REPOSITORY_PATH") {
         Ok(v) => v,
@@ -115,9 +116,9 @@ fn v(req: web::Form<Diary>) -> Result<(), Error> {
 async fn post_diary(req: web::Form<Diary>) -> impl Responder {
     let response = html! {
         h1 {"updated!"}
-        (PreEscaped(r#"<script>setTimeout(() => {window.location.pathname = ""},1000)</script>"#))
+        (PreEscaped(r#"<script>setTimeout(() => {window.location.pathname = ""}, 1000)</script>"#))
     };
-    match v(req) {
+    match commit_diary(req) {
         Ok(_) => HttpResponse::Ok().body(response.into_string()),
         Err(e) => HttpResponse::InternalServerError().body(format!("{}", e)),
     }
@@ -125,11 +126,15 @@ async fn post_diary(req: web::Form<Diary>) -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    // RUST LOGSを出す
     std::env::set_var("RUST_LOG", "info");
     env_logger::init();
+
+    let args: Vec<String> = env::args().collect();
+
     let v = Arc::new(Mutex::new(ProcessStatus { running: false }));
     let arc = v.clone();
-    let args: Vec<String> = env::args().collect();
+    
     HttpServer::new(move || {
         App::new()
             .wrap(Logger::default())
