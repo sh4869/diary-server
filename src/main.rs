@@ -88,7 +88,7 @@ fn commit_diary(req: web::Form<Diary>) -> Result<(), Error> {
         Err(e) => return Err(std::io::Error::new(std::io::ErrorKind::NotFound, e)),
     };
     // git pullの実行
-    run_git_command(&diary_repository_path, &Vec::from(["pull", "origin", "main"]))?;
+    run_git_command(&diary_repository_path, &Vec::from(["pull", "origin", "diary-data"]))?;
     // ファイルを作成
     let dates: Vec<&str> = req.date.split("-").collect();
     let path = format!("{}/diary/{}/{}/{}.md", diary_repository_path, dates[0], dates[1], dates[2]);
