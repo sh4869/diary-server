@@ -1,92 +1,113 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>simple diary writer</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" integrity="sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet" />
-  <style>
-    html {
-      font-size: 100%;
-    }
-    body {
-      max-width: 1000px;
-      margin: auto;
-      font-family: "Poiret One", cursive;
-      background-color: #e3e3e3;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>simple diary writer</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
+      integrity="sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        font-size: 100%;
+      }
+      body {
+        max-width: 1000px;
+        margin: auto;
+        font-family: "Poiret One", cursive;
+        background-color: #e3e3e3;
+      }
 
-    label {
-      font-size: 1.5rem;
-    }
+      label {
+        font-size: 1.5rem;
+      }
 
-    input {
-      margin-bottom: 1rem;
-      border-radius: 3px;
-      /*ボックス角の丸み*/
-      border: 2px solid #ddd;
-      /*枠線*/
-      box-sizing: border-box;
-      padding-right: 1rem;
-    }
+      input {
+        margin-bottom: 1rem;
+        border-radius: 3px;
+        /*ボックス角の丸み*/
+        border: 2px solid #ddd;
+        /*枠線*/
+        box-sizing: border-box;
+        padding-right: 1rem;
+      }
 
-    input:focus {
-      border: 2px solid #ff9900;
-      z-index: 10;
-      outline: 0;
-    }
+      input:focus {
+        border: 2px solid #ff9900;
+        z-index: 10;
+        outline: 0;
+      }
 
-    input,
-    textarea {
-      display: block;
-      font-size: 1.1rem;
-      width: 100%;
-      resize: vertical;
-      height: auto;
-    }
+      input,
+      textarea {
+        display: block;
+        font-size: 1.1rem;
+        width: 100%;
+        resize: vertical;
+        height: auto;
+      }
 
-    .container {
-      width: 90%;
-      margin: auto;
-    }
+      .container {
+        width: 90%;
+        margin: auto;
+      }
 
-    button {
-      margin-top: 1rem;
-      font-family: "Poiret One", cursive;
-      background-color: #f5f5f5;
-      margin-bottom: 1rem;
-      border-radius: 3px;
-      border: 1px solid #ddd;
-      font-size: 1.3rem;
-      float: right;
-    }
-  </style>
-</head>
+      button {
+        margin-top: 1rem;
+        font-family: "Poiret One", cursive;
+        background-color: #f5f5f5;
+        margin-bottom: 1rem;
+        border-radius: 3px;
+        border: 1px solid #ddd;
+        font-size: 1.3rem;
+        float: right;
+      }
+      #count {
+        font-family: cursive;
+        font-size: 1.1rem;
+      }
+    </style>
+  </head>
 
-<body class="hack dark">
-  <div class="container">
-    <h1>Diary Writer</h1>
-    <form action="/diary" method="POST">
-      <label> date </label><input name="date" type="date" id="today"/>
-      <label> title</label><input name="title" value="日記" /> 
-      <label>content</label>
-      <textarea name="content" rows="20"></textarea>
-      <button type="submit">write up!</button>
-    </form>
-  </div>
-</body>
-<script>
-  window.onload = () => {
-    var today = new Date();
-    today.setDate(today.getDate());
-    var yyyy = today.getFullYear();
-    var mm = ("0" + (today.getMonth() + 1)).slice(-2);
-    var dd = ("0" + today.getDate()).slice(-2);
-    document.getElementById("today").value = yyyy + '-' + mm + '-' + dd;
-  }
-</script>
-
+  <body class="hack dark">
+    <div class="container">
+      <h1>Diary Writer</h1>
+      <form action="/diary" method="POST">
+        <label> date </label><input name="date" type="date" id="today" />
+        <label> title</label><input name="title" value="日記" />
+        <label>content</label>
+        <textarea name="content" id="content" rows="20"></textarea>
+        <span id="count">0 文字</span>
+        <button type="submit">write up!</button>
+      </form>
+    </div>
+  </body>
+  <script>
+    // 日付を入れる処理
+    window.onload = () => {
+      var today = new Date();
+      today.setDate(today.getDate());
+      var yyyy = today.getFullYear();
+      var mm = ("0" + (today.getMonth() + 1)).slice(-2);
+      var dd = ("0" + today.getDate()).slice(-2);
+      document.getElementById("today").value = yyyy + "-" + mm + "-" + dd;
+    };
+    const target = document.querySelector("#content");
+    console.log(target)
+    const count = document.querySelector("#count")
+    target.addEventListener("keyup", (event) => {
+      console.log(event)
+      count.innerText = event.target.value.length + " 文字"
+    });
+  </script>
 </html>
